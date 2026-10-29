@@ -1,581 +1,1165 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3일 완성! 일본 여행 벼락치기 학습기</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
-        }
-        .japanese-text {
-            font-family: 'Noto Sans JP', sans-serif;
-        }
-        .wrong-char {
-            color: #ef4444;
-            font-weight: bold;
-            background-color: #fee2e2;
-            padding: 0 2px;
-            border-radius: 3px;
-        }
-        .correct-char {
-            color: #10b981;
-            font-weight: bold;
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일본어 여행 50선 마스터</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts Inter & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .active-card {
+      border-color: #3b82f6;
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -4px rgba(59, 130, 246, 0.1);
+    }
+    @keyframes pulse-red {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.05); }
+    }
+    .recording-pulse {
+      animation: pulse-red 1.5s infinite;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col items-center justify-center p-3 sm:p-6">
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between">
 
-    <!-- Main Container -->
-    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 flex flex-col min-h-[680px]">
-
-        <!-- Header -->
-        <header class="bg-indigo-600 text-white p-4 sm:p-5 flex items-center justify-between shadow-md">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl">🇯🇵</span>
-                <div>
-                    <h1 class="font-bold text-lg sm:text-xl tracking-tight">여행 3일 전! 일본어 벼락치기</h1>
-                    <p class="text-xs text-indigo-200">식당 · 쇼핑 · 편의점 · 교통 200개 마스터</p>
-                </div>
-            </div>
-            <div id="header-actions" class="hidden flex items-center space-x-2">
-                <!-- Dynamic Header Action Buttons -->
-            </div>
-        </header>
-
-        <!-- Dynamic Content Area -->
-        <main id="app-content" class="flex-1 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto">
-            <!-- Screen content renders here -->
-        </main>
-
-        <!-- Toast Notification -->
-        <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-5 py-3 rounded-full shadow-lg text-sm flex items-center space-x-2 transition-all opacity-0 pointer-events-none z-50">
-            <i id="toast-icon" class="fas fa-info-circle text-indigo-400"></i>
-            <span id="toast-msg">알림 메시지</span>
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="goHome()">
+        <div class="bg-white text-indigo-600 p-2 rounded-xl font-bold text-lg shadow">
+          <i class="fa-solid fa-plane-departure"></i>
         </div>
+        <div>
+          <h1 class="text-lg font-bold leading-tight">일본어 50선</h1>
+          <p class="text-xs text-indigo-200">현지 실전 회화 & 발음 평가</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="openReviewModal()" class="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-400 text-xs sm:text-sm font-semibold rounded-lg flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-bookmark text-amber-300"></i>
+          <span>복습 창고</span>
+          <span id="reviewCountBadge" class="bg-amber-400 text-indigo-950 px-1.5 py-0.5 rounded-full text-xs font-extrabold ml-1">0</span>
+        </button>
+      </div>
     </div>
+    
+    <!-- Progress Bar -->
+    <div class="w-full bg-indigo-800 h-1.5">
+      <div id="progressBar" class="bg-amber-400 h-1.5 w-0 transition-all duration-300"></div>
+    </div>
+  </header>
 
-    <script>
-        // Base templates for generating 200 comprehensive scenarios dynamically
-        const SCENARIO_CATEGORIES = [
-            { category: "식당 입구/예약", color: "bg-emerald-100 text-emerald-800" },
-            { category: "식당 주문/추천", color: "bg-emerald-100 text-emerald-800" },
-            { category: "식당 미식/취향", color: "bg-emerald-100 text-emerald-800" },
-            { category: "식당 계산/더치페이", color: "bg-emerald-100 text-emerald-800" },
-            { category: "편의점 음료/도시락", color: "bg-amber-100 text-amber-800" },
-            { category: "편의점 봉투/젓가락", color: "bg-amber-100 text-amber-800" },
-            { category: "쇼핑 가격/사이즈", color: "bg-sky-100 text-sky-800" },
-            { category: "쇼핑 결제/면세", color: "bg-sky-100 text-sky-800" },
-            { category: "지하철/버스 길찾기", color: "bg-yellow-100 text-yellow-800" },
-            { category: "택시/이동", color: "bg-yellow-100 text-yellow-800" },
-            { category: "호텔 체크인/짐보관", color: "bg-purple-100 text-purple-800" },
-            { category: "카페/디저트 주문", color: "bg-pink-100 text-pink-800" },
-            { category: "이자카야/술집", color: "bg-orange-100 text-orange-800" },
-            { category: "드럭스토어/약국", color: "bg-teal-100 text-teal-800" },
-            { category: "관광지/티켓 구매", color: "bg-indigo-100 text-indigo-800" },
-            { category: "긴급/분실/도움요청", color: "bg-rose-100 text-rose-800" }
-        ];
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
 
-        // Seed core base templates to build full 200 scenario database
-        const SEED_TEMPLATES = [
-            {
-                category: "식당 입구",
-                badgeColor: "bg-emerald-100 text-emerald-800",
-                title: "식당 입구에서 인원수 말하기",
-                dialogue: [
-                    { speaker: "점원", jp: "いらっしゃいませ！何名様ですか？", reading: "이랏샤이마세! 난메-사마데스카?", kr: "어서오세요! 몇 분이신가요?", tip: "何名様(난메-사마)는 점원이 손님에게 인원수를 물어보는 정중한 표현입니다." },
-                    { speaker: "나", jp: "すみません、二人です。", reading: "스미마센, 후타리데스.", kr: "저기요, 2명입니다.", tip: "2명은 '후타리(二人)'라고 합니다. (1명: 히토리, 3명: 산닌, 4명: 욘닌)" },
-                    { speaker: "점원", jp: "はい、こちらへどうぞ。", reading: "하이, 코치라에 도-조.", kr: "네, 이쪽으로 오세요.", tip: "こちらへどうぞ는 자리나 방향을 안내할 때 쓰이는 표준 표현입니다." },
-                    { speaker: "나", jp: "日本語のメニューはありますか？", reading: "니혼고노 메뉴-와 아리마스카?", kr: "일본어 (또는 한국어) 메뉴판이 있나요?", tip: "韓国語(칸코쿠고:한국어) / 英語(에-고:영어)로 바꿔서 질문할 수도 있습니다." },
-                    { speaker: "점원", jp: "少々お待ちください。", reading: "쇼-쇼- 오마치쿠다사이.", kr: "잠시만 기다려 주세요.", tip: "少々(쇼-쇼-)는 '잠시/잠깐'의 격식있는 표현입니다." }
-                ]
-            },
-            {
-                category: "편의점",
-                badgeColor: "bg-amber-100 text-amber-800",
-                title: "편의점 도시락 데우기 & 봉투 거절",
-                dialogue: [
-                    { speaker: "점원", jp: "お弁当、温めますか？", reading: "오벤토-, 아타타메마스카?", kr: "도시락 데워드릴까요?", tip: "温めますか(아타타메마스카)가 들리면 도시락 데우기 질문입니다." },
-                    { speaker: "나", jp: "はい、お願いします。", reading: "하이, 오네가이시마스.", kr: "네, 부탁합니다.", tip: "부탁할 때는 간단히 '하이, 오네가이시마스'라고 대답하세요." },
-                    { speaker: "점원", jp: "袋はお付けしますか？", reading: "후쿠로와 오츠케시마스카?", kr: "봉투에 담아드릴까요?", tip: "袋(후쿠로)는 비닐봉투를 의미합니다." },
-                    { speaker: "나", jp: "いいえ、大丈夫です。", reading: "이이에, 다이죠-부데스.", kr: "아니요, 괜찮습니다.", tip: "大丈夫です(다이죠-부데스)는 거절할 때 '됐습니다/괜찮습니다'의 유용한 표현입니다." },
-                    { speaker: "점원", jp: "ありがとうございます。またどうぞ。", reading: "아리가토-고자이마스. 마타 도-조.", kr: "감사합니다. 또 오세요.", tip: "またどうぞ는 '또 이용해 주세요'라는 인삿말입니다." }
-                ]
-            },
-            {
-                category: "쇼핑",
-                badgeColor: "bg-sky-100 text-sky-800",
-                title: "가격 확인 및 신용카드 결제 문의",
-                dialogue: [
-                    { speaker: "나", jp: "すみません、これはいくらですか？", reading: "스미마센, 코레와 이쿠라데스카?", kr: "저기요, 이것은 얼마인가요?", tip: "いくら(이쿠라)는 '얼마'를 뜻하는 가격 질문 핵심 단어입니다." },
-                    { speaker: "점원", jp: "こちらは千五百円です。", reading: "코치라와 센고하쿠엔데스.", kr: "이것은 1,500엔입니다.", tip: "1000엔: 센엔, 500엔: 고하쿠엔, 1500엔: 센고하쿠엔입니다." },
-                    { speaker: "나", jp: "カードは使えますか？", reading: "카-도와 쓰카에마스카?", kr: "카드로 결제 가능한가요?", tip: "使えますか(쓰카에마스카)는 '사용할 수 있습니까?'라는 질문입니다." },
-                    { speaker: "점원", jp: "はい、ご利用いただけます。", reading: "하이, 고리요-이타다케마스.", kr: "네, 사용하실 수 있습니다.", tip: "ご利用いただけます는 '이용 가능합니다'의 정중한 표현입니다." },
-                    { speaker: "나", jp: "じゃあ、これでお願いします。", reading: "쟈-, 코레데 오네가이시마스.", kr: "그럼 이걸로 부탁드립니다.", tip: "구매를 확정할 때 쓰는 깔끔한 마무리 문장입니다." }
-                ]
-            }
-        ];
+    <!-- View 1: Main Dashboard / Stage List -->
+    <section id="dashboardView" class="space-y-6">
+      <!-- Welcome Banner -->
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="inline-block bg-white/20 text-xs px-2.5 py-1 rounded-full font-medium mb-2">⚡ D-3 벼락치기 모드</span>
+            <h2 class="text-2xl font-bold mb-1">일본 여행 필수 회화 50선</h2>
+            <p class="text-sm text-indigo-100">현지에서 영어가 통하지 않는 10가지 필수 동선별 실전 대화</p>
+          </div>
+          <button onclick="startStudy(0)" class="hidden sm:flex bg-amber-400 hover:bg-amber-300 text-indigo-950 font-bold px-4 py-2.5 rounded-xl text-sm shadow items-center space-x-2 transition">
+            <i class="fa-solid fa-play"></i>
+            <span>처음부터 시작</span>
+          </button>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-white/20 text-center">
+          <div>
+            <p class="text-xs text-indigo-200">전체 상황</p>
+            <p class="text-lg font-bold">50개</p>
+          </div>
+          <div>
+            <p class="text-xs text-indigo-200">학습 완료</p>
+            <p id="completedStat" class="text-lg font-bold text-amber-300">0개</p>
+          </div>
+          <div>
+            <p class="text-xs text-indigo-200">복습 필요</p>
+            <p id="reviewStat" class="text-lg font-bold text-red-300">0개</p>
+          </div>
+        </div>
+      </div>
 
-        // Generate 200 scenarios deterministically for total coverage
-        function generate200Scenarios() {
-            const list = [];
-            const topics = [
-                { name: "식당 인원수", sub: ["1명", "2명", "3명", "4명", "단체석"] },
-                { name: "식당 주문", sub: ["인기메뉴", "음료 세트", "곱빼기(오오모리)", "매운맛 조정", "알레르기"] },
-                { name: "편의점", sub: ["도시락 데우기", "나무젓가락", "빨대", "포인트카드", "영수증"] },
-                { name: "쇼핑", sub: ["사이즈 확인", "색상 변경", "새제품 요청", "면세(Tax Free)", "선물 포장"] },
-                { name: "길찾기", sub: ["지하철역", "버스정류장", "화장실", "편의점", "유명 관광지"] },
-                { name: "택시/이동", sub: ["목적지 말하기", "여기서 내리기", "우회전/좌회전", "트렁크 짐 넣기", "영수증 받기"] },
-                { name: "호텔", sub: ["체크인", "체크아웃", "짐 보관", "수건 추가", "와이파이 비번"] },
-                { name: "카페/디저트", sub: ["아이스/핫", "테이크아웃", "디카페인", "덜 달게", "매장 이용"] },
-                { name: "이자카야", sub: ["생맥주(나마비루)", "추천 꼬치", "물 부탁", "오토오시(기본안주)", "계산"] },
-                { name: "약국/드럭스토어", sub: ["두통약", "소화제", "파스", "안약", "재고 문의"] }
-            ];
+      <!-- Quick Actions -->
+      <div class="flex gap-3">
+        <button onclick="startStudy(getContinueIndex())" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow flex items-center justify-center space-x-2 transition">
+          <i class="fa-solid fa-forward"></i>
+          <span id="continueBtnText">이어서 학습하기</span>
+        </button>
+        <button onclick="startRandomStudy()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-3 px-4 rounded-xl shadow-sm flex items-center justify-center space-x-2 transition">
+          <i class="fa-solid fa-shuffle text-indigo-500"></i>
+          <span>랜덤 1개</span>
+        </button>
+      </div>
 
-            const numWords = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
-            const countWords = ["ひとつ", "ふたつ", "みっつ", "よっつ", "いつつ"];
+      <!-- Stages Group -->
+      <div class="space-y-4">
+        <h3 class="text-base font-bold text-slate-800 flex items-center space-x-2">
+          <i class="fa-solid fa-map-pin text-indigo-600"></i>
+          <span>학습 스테이지 선택 (001~050)</span>
+        </h3>
+        
+        <div id="stageList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+    </section>
 
-            for (let i = 1; i <= 200; i++) {
-                const catObj = SCENARIO_CATEGORIES[(i - 1) % SCENARIO_CATEGORIES.length];
-                const topic = topics[(i - 1) % topics.length];
-                const subTopic = topic.sub[(i - 1) % topic.sub.length];
-                const seedIndex = (i - 1) % SEED_TEMPLATES.length;
-                const seed = SEED_TEMPLATES[seedIndex];
+    <!-- View 2: Detailed Learning Session View -->
+    <section id="studyView" class="hidden space-y-6">
+      
+      <!-- Top Navigation & Stage Info -->
+      <div class="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <button onclick="goHome()" class="text-slate-500 hover:text-slate-800 p-2 rounded-lg transition">
+          <i class="fa-solid fa-arrow-left text-lg"></i>
+        </button>
+        <div class="text-center">
+          <span id="stageCategoryBadge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Stage 1</span>
+          <h2 id="scenarioTitle" class="text-base font-bold text-slate-800 mt-1">상황 제목</h2>
+        </div>
+        <button id="bookmarkBtn" onclick="toggleCurrentBookmark()" class="p-2 rounded-lg text-slate-300 hover:text-amber-400 transition">
+          <i class="fa-solid fa-bookmark text-xl"></i>
+        </button>
+      </div>
 
-                list.push({
-                    id: `sec${i}`,
-                    category: catObj.category,
-                    badgeColor: catObj.color,
-                    title: `[상황 ${i}] ${topic.name} - ${subTopic} (실전 ${i}단계)`,
-                    dialogue: [
-                        {
-                            speaker: "점원",
-                            jp: `いらっしゃいませ！(${i}番様) ご注文をお伺いします。`,
-                            reading: `이랏샤이마세! (${i}반사마) 고추-몬오 오우카가이시마스.`,
-                            kr: `어서오세요! (${i}번 손님) 주문을 도와드리겠습니다.`,
-                            tip: "いらっしゃいませ(어서오세요)는 가게에 들어섰을 때 들리는 기본 인삿말입니다."
-                        },
-                        {
-                            speaker: "나",
-                            jp: `すみません、これを${countWords[(i - 1) % countWords.length]}ください。`,
-                            reading: `스미마센, 코레오 ${countWords[(i - 1) % countWords.length]} 쿠다사이.`,
-                            kr: `저기요, 이것을 ${(i - 1) % 5 + 1}개 주세요.`,
-                            tip: "수량 표현: 하나(히토츠), 둘(후타츠), 셋(미츠), 넷(요츠), 다섯(이츠츠)입니다."
-                        },
-                        {
-                            speaker: "점원",
-                            jp: `かしこまりました。カードで支払われますか？`,
-                            reading: "카시코마리마시타. 카-도데 시하라와레마스카?",
-                            kr: "알겠습니다. 카드로 결제하시겠습니까?",
-                            tip: "カード(카-도: 신용/체크카드), 支払う(시하라우: 결제하다)를 뜻합니다."
-                        },
-                        {
-                            speaker: "나",
-                            jp: `はい、ICカード/クレジットカードでお願いします。`,
-                            reading: "하이, 아이시-카-도/쿠레짓토카-도데 오네가이시마스.",
-                            kr: "네, 카드로 부탁드립니다.",
-                            tip: "IC카드(스이카/파스모) 및 신용카드 모두 이용 가능할 때 쓰는 대답입니다."
-                        },
-                        {
-                            speaker: "점원",
-                            jp: `ありがとうございます。またお越しください！`,
-                            reading: "아리가토-고자이마스. 마타 오코시쿠다사이!",
-                            kr: "감사합니다. 또 방문해 주세요!",
-                            tip: "またお越しください(마타 오코시쿠다사이)는 정중한 작별 인사입니다."
-                        }
-                    ]
-                });
-            }
-            return list;
+      <!-- Key Learning Point Banner -->
+      <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl shadow-sm">
+        <div class="flex items-start space-x-3">
+          <i class="fa-solid fa-lightbulb text-amber-500 text-lg mt-0.5"></i>
+          <div>
+            <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">현지 파악 & 학습 핵심 포인트</h4>
+            <p id="learningPointText" class="text-sm text-amber-900 mt-0.5 leading-relaxed">학습 포인트 설명이 들어갑니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialogue Card Container -->
+      <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+        
+        <!-- Traveler Part (User Role) -->
+        <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-600 text-white flex items-center space-x-1">
+              <i class="fa-solid fa-user"></i>
+              <span>나 (여행자)</span>
+            </span>
+            <button onclick="playAudio('traveler')" class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 p-2 rounded-full transition" title="일본어 듣기">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          
+          <div class="mt-2 space-y-1">
+            <p id="travelerJP" class="text-xl font-bold text-slate-900 tracking-wide">日本語文章</p>
+            <p id="travelerKR" class="text-sm text-slate-500 font-medium">한국어 해석 및 발음</p>
+          </div>
+
+          <!-- Pronunciation Speech Test Section -->
+          <div class="mt-4 pt-4 border-t border-slate-200/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">내 발음 따라하고 평가 받기</span>
+              <span id="speechStatus" class="text-xs text-slate-400">버튼을 누르고 말해보세요</span>
+            </div>
+
+            <div class="flex items-center space-x-3 mt-2">
+              <button id="micBtn" onclick="toggleSpeechRecognition()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center space-x-2 transition">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="micBtnText">발음 녹음 시작</span>
+              </button>
+            </div>
+
+            <!-- Recognition Result Box -->
+            <div id="speechResultBox" class="hidden mt-3 p-3 bg-slate-100 rounded-xl space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-600">인식된 발음:</span>
+                <span id="accuracyScore" class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">일치도 0%</span>
+              </div>
+              <p id="recognizedText" class="text-sm font-medium text-slate-800 italic">"..."</p>
+              <p id="accuracyFeedback" class="text-xs text-slate-500">피드백 메시지</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Counterpart Part (Local / Staff) -->
+        <div class="p-5 bg-white">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-600 text-white flex items-center space-x-1">
+              <i class="fa-solid fa-store"></i>
+              <span>점원 / 현지인</span>
+            </span>
+            <button onclick="playAudio('counterpart')" class="text-emerald-600 hover:text-emerald-800 bg-emerald-50 p-2 rounded-full transition" title="일본어 듣기">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          
+          <div class="mt-2 space-y-1">
+            <p id="counterpartJP" class="text-xl font-bold text-slate-900 tracking-wide">相手の日本語</p>
+            <p id="counterpartKR" class="text-sm text-slate-500 font-medium">상대방 한국어 해석 및 발음</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center pt-2">
+        <button id="prevBtn" onclick="navigateScenario(-1)" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl shadow-sm flex items-center space-x-2 transition">
+          <i class="fa-solid fa-chevron-left"></i>
+          <span>이전</span>
+        </button>
+
+        <span id="scenarioIndexBadge" class="text-sm font-bold text-slate-500">1 / 50</span>
+
+        <button id="nextBtn" onclick="navigateScenario(1)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3 rounded-xl shadow flex items-center space-x-2 transition">
+          <span>다음</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Review Warehouse Modal -->
+  <div id="reviewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-indigo-50">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-bookmark text-amber-500 text-xl"></i>
+          <h3 class="text-lg font-bold text-slate-800">복습 필요 대화 창고</h3>
+        </div>
+        <button onclick="closeReviewModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div id="reviewList" class="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3">
+        <!-- Dynamically Populated -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
+        <span class="text-xs text-slate-500">저장된 복습 항목을 눌러 해당 상황으로 바로 이동할 수 있습니다.</span>
+        <button onclick="closeReviewModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+    <p>일본 여행 회화 앱 &copy; GitHub Pages 배포용</p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // 50가지 필수 대화 상황 데이터 (학습 포인트 포함)
+    const scenarios = [
+      // Stage 1. 대중교통
+      {
+        id: 1,
+        stage: "Stage 1. 대중교통",
+        title: "001. 지하철 목적지 방면 확인",
+        point: "'この電車(코노 덴샤)'는 이 전철이라는 뜻입니다. 목적지 뒤에 'に行きますか(니 이키마스카?)'를 붙이면 '가나요?'라는 문장이 됩니다.",
+        travelerJP: "この電車(でんしゃ)は新宿(しんじゅく)に行(い)きますか？",
+        travelerKR: "코노 덴샤와 신주쿠니 이키마스카? (이 전철 신주쿠 가나요?)",
+        counterpartJP: "はい、行(い)きますよ。",
+        counterpartKR: "하이, 이키마스요. (네, 갑니다.)"
+      },
+      {
+        id: 2,
+        stage: "Stage 1. 대중교통",
+        title: "002. 환승역 물어보기",
+        point: "'乗り換え(노리카에)'는 갈아타기(환승)입니다. 'どこで(도코데)'는 '어디서'라는 필수 질문어입니다.",
+        travelerJP: "どこで乗り換え(のりかえ)すればいいですか？",
+        travelerKR: "도코데 노리카에스레바 이이데스카? (어디서 환승해야 하나요?)",
+        counterpartJP: "次(つぎ)の駅(えき)で乗り換(のりか)えてください。",
+        counterpartKR: "츠기노 에키데 노리카에테 쿠다사이. (다음 역에서 환승하세요.)"
+      },
+      {
+        id: 3,
+        stage: "Stage 1. 대중교통",
+        title: "003. 버스 요금 지불 방식 문의",
+        point: "일본 버스는 뒤문으로 타서 앞문으로 내릴 때 내는 '後払い(아토바라이-후불)' 방식이 많습니다.",
+        travelerJP: "運賃(うんちん)は先払い(さきばらい)ですか、後払い(あとばらい)ですか？",
+        travelerKR: "운친와 사키바라이데스카, 아토바라이데스카? (요금은 선불인가요, 후불인가요?)",
+        counterpartJP: "後払い(あとばらい)です。降(おり)るときにお願(ねが)いします。",
+        counterpartKR: "아토바라이데스. 오리루토키니 오네가이시마스. (후불입니다. 내릴 때 해주세요.)"
+      },
+      {
+        id: 4,
+        stage: "Stage 1. 대중교통",
+        title: "004. 출구 방향 확인하기",
+        point: "출구 방향을 물을 땐 '北口(키타구치-북쪽출구)', '東口(히가시구치-동쪽출구)' 뒤에 'はどちらですか(와 도치라데스카)'를 붙이세요.",
+        travelerJP: "北口(きたぐち)はどちらですか？",
+        travelerKR: "키타구치와 도치라데스카? (북쪽 출구는 어느 쪽인가요?)",
+        counterpartJP: "階段(かいだん)を上が(あが)って右側(みぎがわ)です。",
+        counterpartKR: "카이단오 아갓테 미기가와데스. (계단을 올라가서 오른쪽입니다.)"
+      },
+      {
+        id: 5,
+        stage: "Stage 1. 대중교통",
+        title: "005. 정차역 알림 확인",
+        point: "'次(츠기)'는 '다음'을 의미합니다. 내가 내릴 역이 맞는지 확신이 서지 않을 때 주변 사람에게 가볍게 물어보세요.",
+        travelerJP: "次(つぎ)は浅草(あさくさ)ですか？",
+        travelerKR: "츠기와 아사쿠사데스카? (다음이 아사쿠사인가요?)",
+        counterpartJP: "いいえ、もう一つ(ひとつ)先(さき)です。",
+        counterpartKR: "이이에, 모- 히토츠 사키데스. (아니요, 한 정거장 더 가야 합니다.)"
+      },
+
+      // Stage 2. 택시 이용
+      {
+        id: 6,
+        stage: "Stage 2. 택시 이용",
+        title: "006. 목적지 설정 및 출발",
+        point: "구글 맵의 주소나 화면을 손으로 가리키며 'ここまで(코코마데 - 여기까지)' + 'お願いします(오네가이시마스)'하면 가장 정확합니다.",
+        travelerJP: "ここまでお願いします。",
+        travelerKR: "코코마데 오네가이시마스. (여기까지 부탁합니다.)",
+        counterpartJP: "かしこまりました。出発(しゅっぱつ)します。",
+        counterpartKR: "카시코마리마시타. 슈빠츠시마스. (알겠습니다. 출발합니다.)"
+      },
+      {
+        id: 7,
+        stage: "Stage 2. 택시 이용",
+        title: "007. 예상 소요 시간/요금 문의",
+        point: "'どれくらい(도레쿠라이)'는 '얼마나'라는 뜻입니다. 시간이나 금액을 가늠할 때 유용합니다.",
+        travelerJP: "どれくらいかかりますか？",
+        travelerKR: "도레쿠라이 카카리마스카? (얼마나 걸리나요?)",
+        counterpartJP: "20分(にじゅっぷん)くらいです。",
+        counterpartKR: "니쥿푼 쿠라이데스. (20분 정도 걸립니다.)"
+      },
+      {
+        id: 8,
+        stage: "Stage 2. 택시 이용",
+        title: "008. 트렁크에 짐 넣기",
+        point: "일본 택시 문은 자동문이지만 트렁크는 기사님이 직접 열어주십니다. 캐리어가 있다면 부탁하세요.",
+        travelerJP: "トランクを開(あ)けていただけますか？",
+        travelerKR: "토란쿠오 아케테 이타다케마스카? (트렁크 좀 열어주시겠어요?)",
+        counterpartJP: "はい、どうぞ。",
+        counterpartKR: "하이, 도-조. (네, 그러세요.)"
+      },
+      {
+        id: 9,
+        stage: "Stage 2. 택시 이용",
+        title: "009. 특정 장소에 하차 요청",
+        point: "'～の前で(노 마에데 - ~앞에서)' + '降ろしてください(오로시테 쿠다사이 - 내려주세요)' 조합을 외워두세요.",
+        travelerJP: "あのコンビニの前(まえ)で降(おり)ろしてください。",
+        travelerKR: "아노 콘비니노 마에데 오로시테 쿠다사이. (저 편의점 앞에서 내려주세요.)",
+        counterpartJP: "はい、わかりました。",
+        counterpartKR: "하이, 와카리마시타. (네, 알겠습니다.)"
+      },
+      {
+        id: 10,
+        stage: "Stage 2. 택시 이용",
+        title: "010. 영수증 요청",
+        point: "영수증은 '領収書(료-슈-쇼)'라고 합니다. 물건을 두고 내렸을 때 택시 회사 연락처를 확인하는 데도 필수입니다.",
+        travelerJP: "領収書(りょうしゅうしょ)をいただけますか？",
+        travelerKR: "료-슈-쇼오 이타다케마스카? (영수증 주시겠어요?)",
+        counterpartJP: "はい、どうぞ。ありがとうございます。",
+        counterpartKR: "하이, 도-조. 아리가토-고자이마스. (네, 여기 있습니다. 감사합니다.)"
+      },
+
+      // Stage 3. 길 찾기
+      {
+        id: 11,
+        stage: "Stage 3. 길 찾기",
+        title: "011. 특정 건물/명소 위치 문의",
+        point: "'～はどちらですか(와 도치라데스카?)'는 매우 정중하게 방향을 물어보는 표현입니다.",
+        travelerJP: "すみません、東京(とうきょう)タワーはどちらですか？",
+        travelerKR: "스미마센, 토-쿄-타와-와 도치라데스카? (실례합니다, 도쿄타워는 어느 쪽인가요?)",
+        counterpartJP: "この道(みち)をまっすぐ行ってください。",
+        counterpartKR: "코노 미치오 맛스구 이쿠테쿠다사이. (이 길로 직진하세요.)"
+      },
+      {
+        id: 12,
+        stage: "Stage 3. 길 찾기",
+        title: "012. 화장실 위치 문의",
+        point: "급할 때는 'トイレはどこですか？(토이레와 도코데스카?)' 하나만 기억하면 바로 해결됩니다.",
+        travelerJP: "トイレはどこですか？",
+        travelerKR: "토이레와 도코데스카? (화장실은 어디인가요?)",
+        counterpartJP: "コンビニの中(なか)にありますよ。",
+        counterpartKR: "콘비니노 나카니 아리마스요. (편의점 안에 있어요.)"
+      },
+      {
+        id: 13,
+        stage: "Stage 3. 길 찾기",
+        title: "013. 도보 소요 시간 물어보기",
+        point: "'歩いて(아루이테)'는 '걸어서'라는 뜻입니다. 걸어갈 수 있는 거리인지 확인할 때 사용하세요.",
+        travelerJP: "ここから歩(ある)いてどれくらいですか？",
+        travelerKR: "코코카라 아루이테 도레쿠라이데스카? (여기서 걸어서 얼마나 걸리나요?)",
+        counterpartJP: "5分(ごふん)くらいですよ。",
+        counterpartKR: "고푼 쿠라이데스요. (5분 정도 걸려요.)"
+      },
+      {
+        id: 14,
+        stage: "Stage 3. 길 찾기",
+        title: "014. 길을 잃었을 때",
+        point: "'道に迷ってしまいました(미치니 마욧테시마이마시타)'는 길을 잃었다는 표현입니다.",
+        travelerJP: "道(みち)に迷(まよ)ってしまいました。ここに行(い)きたいです。",
+        travelerKR: "미치니 마욧테시마이마시타. 코코니 이키타이데스. (길을 잃었습니다. 여기 가고 싶어요.)",
+        counterpartJP: "ああ、反対側(はんたいがわ)ですね。教(おし)えます。",
+        counterpartKR: "아-, 한타이가와데스네. 오시에마스. (아, 반대쪽이네요. 가르쳐 드릴게요.)"
+      },
+      {
+        id: 15,
+        stage: "Stage 3. 길 찾기",
+        title: "015. 엘리베이터/에스컬레이터 위치",
+        point: "짐이 무겁거나 유모차가 있을 때 'エレベーター(에레베-타-)'의 위치를 문의해보세요.",
+        travelerJP: "エレベーターはどこですか？",
+        travelerKR: "에레베-타-와 도코데스카? (엘리베이터는 어디인가요?)",
+        counterpartJP: "奥(おく)の右側(みぎがわ)にございます。",
+        counterpartKR: "오쿠노 미기가와니 고자이마스. (안쪽 오른쪽에 있습니다.)"
+      },
+
+      // Stage 4. 편의점 이용
+      {
+        id: 16,
+        stage: "Stage 4. 편의점 이용",
+        title: "016. 물건 위치 찾기",
+        point: "물건 이름을 말하고 '～はどこにありますか(와 도코니 아리마스카)'라고 물어보세요.",
+        travelerJP: "傘(かさ)はどこにありますか？",
+        travelerKR: "카사와 도코니 아리마스카? (우산은 어디에 있나요?)",
+        counterpartJP: "入り口(いりぐち)の横(よこ)にございます。",
+        counterpartKR: "이리구치노 요코니 고자이마스. (입구 옆에 있습니다.)"
+      },
+      {
+        id: 17,
+        stage: "Stage 4. 편의점 이용",
+        title: "017. 도시락 데우기",
+        point: "점원이 '温めますか(아타타메마스카?)'라고 물으면 데워드릴까요?라는 뜻입니다. 'はい(하이)'라고 답하세요.",
+        travelerJP: "はい、お願(ねが)いします。",
+        travelerKR: "하이, 오네가이시마스. (네, 부탁합니다.)",
+        counterpartJP: "お弁当(べんとう)、温(あたた)めますか？",
+        counterpartKR: "오ベント-, 아타타메마스카? (도시락 데워드릴까요?)"
+      },
+      {
+        id: 18,
+        stage: "Stage 4. 편의점 이용",
+        title: "018. 비닐봉투 필요 여부",
+        point: "일본은 봉투값을 따로 받습니다. 필요 없을 땐 '大丈夫です(다이죠-부데스 - 괜찮습니다)'라고 하세요.",
+        travelerJP: "大丈夫(だいじょうぶ)です。",
+        travelerKR: "다이죠-부데스. (괜찮습니다 / 필요 없습니다.)",
+        counterpartJP: "袋(ふくろ)はご利用(りよう)ですか？",
+        counterpartKR: "후쿠로와 고리요-데스카? (봉투 필요하신가요?)"
+      },
+      {
+        id: 19,
+        stage: "Stage 4. 편의점 이용",
+        title: "019. 젓가락/숟가락 요청",
+        point: "젓가락은 'お箸(오하시)', 숟가락은 'スプーン(스푸-ン)'입니다. '本(혼)'은 젓가락 개수를 셀 때 쓰는 단위입니다.",
+        travelerJP: "お箸(はし)を2本(にほん)ください。",
+        travelerKR: "오하시오 니혼 쿠다사이. (젓가락 두 개 주세요.)",
+        counterpartJP: "はい、お入れ(いれ)しますね。",
+        counterpartKR: "하이, 오이레시마스네. (네, 넣어드릴게요.)"
+      },
+      {
+        id: 20,
+        stage: "Stage 4. 편의점 이용",
+        title: "020. 포인트 카드 질문 대응",
+        point: "계산할 때 점원이 카드 어쩌구 질문하면 99% 포인트 카드 있냐는 뜻입니다. 없으면 'ないです(나이데스)' 하시면 됩니다.",
+        travelerJP: "ないです。",
+        travelerKR: "나이데스. (없습니다.)",
+        counterpartJP: "ポイントカードはお持ち(もち)ですか？",
+        counterpartKR: "포인토카-도와 오모치데스카? (포인트 카드 있으신가요?)"
+      },
+
+      // Stage 5. 식당 입장
+      {
+        id: 21,
+        stage: "Stage 5. 식당 입장",
+        title: "021. 인원수 말하기",
+        point: "★벼락치기 핵심: 1명은 '히토리(ひとり)', 2명은 '후타리(ふたり)', 3명부터는 '산닌', '욘닌'입니다.",
+        travelerJP: "2人(ふたり)です。",
+        travelerKR: "후타리데스. (2명입니다.)",
+        counterpartJP: "いらっしゃいませ。何名様(なんめいさま)ですか？",
+        counterpartKR: "이라っしゃ이마세. 난메-사마데스카? (어서 오세요. 몇 분이신가요?)"
+      },
+      {
+        id: 22,
+        stage: "Stage 5. 식당 입장",
+        title: "022. 예약 여부 답변",
+        point: "'予約(요야쿠)'는 예약입니다. 안 했을 땐 '予約していません(요야쿠시테이마센)'입니다.",
+        travelerJP: "予約(よやく)していません。",
+        travelerKR: "요야쿠시테이마센. (예약 안 했습니다.)",
+        counterpartJP: "ご予約(よやく)はされていますか？",
+        counterpartKR: "고요야쿠와 사레테이마스카? (예약하셨나요?)"
+      },
+      {
+        id: 23,
+        stage: "Stage 5. 식당 입장",
+        title: "023. 대기 시간 문의",
+        point: "웨이팅이 길어 보일 때 'どのくらい待ちますか(도노쿠라이 마치마스카?)'로 얼마나 기다려야 할지 물어보세요.",
+        travelerJP: "どのくらい待ち(まち)ますか？",
+        travelerKR: "도노쿠라이 마치마스카? (얼마나 기다려야 하나요?)",
+        counterpartJP: "30分(さんじゅっぷん)ほどお待ち(まち)いただきます。",
+        counterpartKR: "산쥿푼호도 오마치이타다키마스. (30분 정도 기다리셔야 합니다.)"
+      },
+      {
+        id: 24,
+        stage: "Stage 5. 식당 입장",
+        title: "024. 창가/테이블 자리 요청",
+        point: "카운터(바 테이블)석이 아닌 일반 테이블석을 원할 때 'テーブル席(테-부루세키)'를 요청하세요.",
+        travelerJP: "テーブル席(せき)は空(あ)いていますか？",
+        travelerKR: "테-부루세키와 아이테이마스카? (테이블 석은 비어 있나요?)",
+        counterpartJP: "はい、どうぞこちらへ。",
+        counterpartKR: "하이, 도-조 코치라에. (네, 이쪽으로 오세요.)"
+      },
+      {
+        id: 25,
+        stage: "Stage 5. 식당 입장",
+        title: "025. 대기 명부에 이름 적기",
+        point: "'名前(나마에)'는 이름입니다. 대기 명판에 영문이나 성을 적어두고 기다리라는 의미입니다.",
+        travelerJP: "はい、わかりました。",
+        travelerKR: "하이, 와카리마시타. (네, 알겠습니다.)",
+        counterpartJP: "お名前(なまえ)を書いてお待ち(まち)ください。",
+        counterpartKR: "오나마에오 카이테 오마치쿠دا사이. (성함을 적고 기다려 주세요.)"
+      },
+
+      // Stage 6. 식당 주문
+      {
+        id: 26,
+        stage: "Stage 6. 식당 주문",
+        title: "026. 메뉴판 요청",
+        point: "'メニュー(메뉴-)'에 'をいただけますか(오 이타다케마스카)'를 붙이면 메뉴판을 달라는 요청이 됩니다.",
+        travelerJP: "メニューをいただけますか？",
+        travelerKR: "메뉴-오 이타다케마스카? (메뉴판 좀 주시겠어요?)",
+        counterpartJP: "はい、どうぞ。",
+        counterpartKR: "하이, 도-조. (네, 여기 있습니다.)"
+      },
+      {
+        id: 27,
+        stage: "Stage 6. 식당 주문",
+        title: "027. 추천 메뉴 문의",
+        point: "무엇을 먹을지 고민될 땐 'おすすめ(오스스메 - 추천)'를 물어보는 것이 실패하지 않는 팁입니다.",
+        travelerJP: "おすすめは何(なん)ですか？",
+        travelerKR: "오스스메와 난데스카? (추천 메뉴는 무엇인가요?)",
+        counterpartJP: "このラーメンが一番人気(いちばんにんき)です。",
+        counterpartKR: "코노 라-멘가 이치반닌키데스. (이 라멘이 가장 인기 있습니다.)"
+      },
+      {
+        id: 28,
+        stage: "Stage 6. 식당 주문",
+        title: "028. 손가락으로 가리켜 주문",
+        point: "가장 쓰기 편한 대화! 메뉴판을 가리키며 'これ(코레 - 이것)' + 'をください(오 쿠다사이)'하면 끝입니다.",
+        travelerJP: "これとこれをください。",
+        travelerKR: "코레토 코레오 쿠다사이. (이것과 이것 주세요.)",
+        counterpartJP: "はい、かしこまりました。",
+        counterpartKR: "하이, 카시코마리마시타. (네, 알겠습니다.)"
+      },
+      {
+        id: 29,
+        stage: "Stage 6. 식당 주문",
+        title: "029. 음료 주문",
+        point: "생맥주는 '生ビール(나마비-루)'라고 합니다. 개수를 셀 때 '1つ(히토츠)', '2つ(후타츠)'를 쓰세요.",
+        travelerJP: "生ビール(なまビール)2つお願いします。",
+        travelerKR: "나마비-루 후타츠 오네가이시마스. (생맥주 두 잔 부탁합니다.)",
+        counterpartJP: "お飲み物(のみもの)はよろしいですか？",
+        counterpartKR: "오노미モノ와 요로시-데스카? (음료는 무엇으로 하시겠어요?)"
+      },
+      {
+        id: 30,
+        stage: "Stage 6. 식당 주문",
+        title: "030. 와사비/특정 재료 빼기",
+        point: "빼달라고 할 때는 재료 뒤에 '抜き(누키)'를 붙이면 됩니다. (예: 와사비누키 = 와사비 빼고)",
+        travelerJP: "わさび抜き(ぬき)でお願(ねが)いします。",
+        travelerKR: "와사비누키데 오네가이시마스. (와사비 빼고 부탁합니다.)",
+        counterpartJP: "はい、わさび抜き(ぬき)ですね。",
+        counterpartKR: "하이, 와사비누키데스네. (네, 와사비 빼고 해드릴게요.)"
+      },
+
+      // Stage 7. 식사 중 & 계산
+      {
+        id: 31,
+        stage: "Stage 7. 식사 중 & 계산",
+        title: "031. 물/얼음물 요청",
+        point: "물은 'お水(오미즈)'입니다. 참고로 찬물은 'お冷(오히야)'라고도 부릅니다.",
+        travelerJP: "お水(みず)をいただけますか？",
+        travelerKR: "오미즈오 이타다케마스카? (물 좀 주시겠어요?)",
+        counterpartJP: "はい、すぐにお持ち(もち)します。",
+        counterpartKR: "하이, 스구니 오모치시마스. (네, 바로 갖다 드리겠습니다.)"
+      },
+      {
+        id: 32,
+        stage: "Stage 7. 식사 중 & 계산",
+        title: "032. 휴지/물티슈 요청",
+        point: "물티슈는 'おしぼり(오시보리)'라고 합니다. 손을 닦거나 상을 닦을 때 필요하면 요청하세요.",
+        travelerJP: "おしぼりをもらえますか？",
+        travelerKR: "오시보리오 모라에마스카? (물티슈 좀 받을 수 있을까요?)",
+        counterpartJP: "はい、どうぞ。",
+        counterpartKR: "하이, 도-조. (네, 여기 있습니다.)"
+      },
+      {
+        id: 33,
+        stage: "Stage 7. 식사 중 & 계산",
+        title: "033. 주문 누락 문의",
+        point: "음식이 오래 안 나올 때는 'まだ来ていない(마다 키테이나이 - 아직 안 나왔다)'를 말씀하세요.",
+        travelerJP: "注文(ちゅうもん)した料理(りょうり)がまだ来ていないのですが…",
+        travelerKR: "츄-몬시타 료-리가 마다 키테이나이노데스가… (주문한 요리가 아직 안 나왔는데요…)",
+        counterpartJP: "すみません、確認(かくにん)してまいります。",
+        counterpartKR: "스미마센, 카쿠닌시테 마이리마스. (죄송합니다, 확인하고 오겠습니다.)"
+      },
+      {
+        id: 34,
+        stage: "Stage 7. 식사 중 & 계산",
+        title: "034. 계산서 요청",
+        point: "★핵심 표현: 계산은 'お会計(오카이케이)'입니다. 'お会計をお願いします(오카이케이오 오네가이시마스)' 꼭 외우세요!",
+        travelerJP: "お会計(かいけい)をお願いします。",
+        travelerKR: "오카이케이오 오네가이시마스. (계산 부탁드립니다.)",
+        counterpartJP: "はい、伝票(でんぴょう)をお持ち(もち)ください。",
+        counterpartKR: "하이, 덴표-오 오모치쿠다사이. (네, 전표를 가지고 계산대로 와주세요.)"
+      },
+      {
+        id: 35,
+        stage: "Stage 7. 식사 중 & 계산",
+        title: "035. 분할 계산 문의 (더치페이)",
+        point: "각자 계산은 '別々(베츠베츠)'라고 합니다. '베츠베츠데 하라에마스카?' 하면 각자 계산해 줍니다.",
+        travelerJP: "別々(べつべつ)で払(はら)えますか？",
+        travelerKR: "베츠베츠데 하라에마스카? (따로따로 계산할 수 있나요?)",
+        counterpartJP: "はい、大丈夫(だいじょうぶ)ですよ。",
+        counterpartKR: "하이, 다이죠-부데스요. (네, 가능합니다.)"
+      },
+
+      // Stage 8. 카페 & 디저트
+      {
+        id: 36,
+        stage: "Stage 8. 카페 & 디저트",
+        title: "036. 아이스/핫 선택",
+        point: "차거운 음료는 앞에 'アイス(아이스)', 따뜻한 것은 'ホット(홋토)'를 붙여 말합니다.",
+        travelerJP: "アイスアメリカンを1つください。",
+        travelerKR: "아이스 아메리카노오 히토츠 쿠다사이. (아이스 아메리카노 하나 주세요.)",
+        counterpartJP: "はい、かしこまりました。",
+        counterpartKR: "하이, 카시코마리마시타. (네, 알겠습니다.)"
+      },
+      {
+        id: 37,
+        stage: "Stage 8. 카페 & 디저트",
+        title: "037. 매장 이용 vs 테이크아웃",
+        point: "포장은 'テイクアウト(테이쿠아우토)' 또는 '持ち帰り(모치카에리)'라고 말하시면 됩니다.",
+        travelerJP: "テイクアウトでお願(ねが)いします。",
+        travelerKR: "테이쿠아우토데 오네가이시마스. (테이크아웃으로 부탁합니다.)",
+        counterpartJP: "店内(てんない)でお召し上がり(めしあがり)ですか？",
+        counterpartKR: "텐나이데 오메시아가리데스카? (매장에서 드시나요?)"
+      },
+      {
+        id: 38,
+        stage: "Stage 8. 카페 & 디저트",
+        title: "038. 두유/우유 변경 요청",
+        point: "'変更(헨코-)'는 변경입니다. 두유는 'ソイ(소이)' 또는 '豆乳(토-뉴-)'라고 표현합니다.",
+        travelerJP: "ソイラテに変更(へんこう)できますか？",
+        travelerKR: "소이라테니 헨코-데키마스카? (두유 라떼로 변경할 수 있나요?)",
+        counterpartJP: "はい、プラス50円(えん)で可能(かのう)です。",
+        counterpartKR: "하이, 푸라스 고쥬-엔데 카노-데스. (네, 50엔 추가로 가능합니다.)"
+      },
+      {
+        id: 39,
+        stage: "Stage 8. 카페 & 디저트",
+        title: "039. 콘센트 자리 확인",
+        point: "일본은 카페라도 아무 콘센트나 함부로 쓰면 안 됩니다! 꼭 '使えますか(츠카에마스카?)' 물어보세요.",
+        travelerJP: "コンセントは使(つか)えますか？",
+        travelerKR: "콘센토와 츠카에마스카? (콘센트 사용할 수 있나요?)",
+        counterpartJP: "こちらのカウンター席(せき)をご利用(りよう)ください。",
+        counterpartKR: "코치라노 카운타-세키오 고리요-쿠다사이. (이쪽 카운터 석을 이용해 주세요.)"
+      },
+      {
+        id: 40,
+        stage: "Stage 8. 카페 & 디저트",
+        title: "040. 남은 음료/디저트 포장",
+        point: "먹다 남은 디저트를 싸달라고 할 땐 '持ち帰り用(모치카에리요-)'로 포장해달라고 해보세요.",
+        travelerJP: "これ、持ち帰り用(もちかえりよう)に包(つつ)んでもらえますか？",
+        travelerKR: "코레, 모치카에리요-니 츠츠인데 모라에마스카? (이것 포장용으로 싸주실 수 있나요?)",
+        counterpartJP: "かしこまりました。",
+        counterpartKR: "카시코마리마시타. (알겠습니다.)"
+      },
+
+      // Stage 9. 길거리 음식 & 포장
+      {
+        id: 41,
+        stage: "Stage 9. 길거리 음식",
+        title: "041. 수량 지정 주문",
+        point: "타코야키 세트 셀 때 '個入り(코이리)' 단위가 쓰입니다. (8個入り-학코이리 = 8개입)",
+        travelerJP: "たこ焼き(やき)、8個(はっこ)入りを1つください。",
+        travelerKR: "타코야키, 학코이리오 히토츠 쿠다사이. (타코야키 8개짜리 하나 주세요.)",
+        counterpartJP: "味(あじ)はソースでいいですか？",
+        counterpartKR: "아지와 소-스데 이이데스카? (맛은 소스 맛으로 해드릴까요?)"
+      },
+      {
+        id: 42,
+        stage: "Stage 9. 길거리 음식",
+        title: "042. 토핑/소스 선택",
+        point: "많이 달라고 할 때 필수 표현! 'たくさん(타쿠상 - 많이)' + 'かけてください(카케테 쿠다사이 - 뿌려주세요)'",
+        travelerJP: "はい、たくさんかけてください。",
+        travelerKR: "하이, 타쿠상 카케테쿠다사이. (네, 많이 뿌려주세요.)",
+        counterpartJP: "マヨネーズはかけますか？",
+        counterpartKR: "마요네-즈와 카케마스카? (마요네즈 뿌려드릴까요?)"
+      },
+      {
+        id: 43,
+        stage: "Stage 9. 길거리 음식",
+        title: "043. 바로 먹는지 확인",
+        point: "'すぐにお召し上がりですか(스구니 오메시아가리데스카?)'는 바로 드실 거냐는 점원의 상투어입니다.",
+        travelerJP: "はい、今(いま)食べます。",
+        travelerKR: "하이, 이마 타베마스. (네, 지금 바로 먹습니다.)",
+        counterpartJP: "すぐにお召し上がり(めしあがり)ですか？",
+        counterpartKR: "스구니 오메시아가리데스카? (바로 드실 건가요?)"
+      },
+      {
+        id: 44,
+        stage: "Stage 9. 길거리 음식",
+        title: "044. 매운 맛 여부 확인",
+        point: "'辛い(카라이)'는 맵다는 뜻입니다. 일본 음식은 신라면 기준 대개 많이 안 매운 편입니다.",
+        travelerJP: "これ、辛(から)いですか？",
+        travelerKR: "코레, 카라이데스카? (이거 매운가요?)",
+        counterpartJP: "少し(すこし)辛(から)いですよ。",
+        counterpartKR: "스코시 카라이데스요. (조금 매워요.)"
+      },
+      {
+        id: 45,
+        stage: "Stage 9. 길거리 음식",
+        title: "045. 쓰레기통 위치 문의",
+        point: "일본은 길거리 쓰레기통이 적습니다. 음식 상점 상인에게 건네면 대신 버려주는 경우도 많습니다.",
+        travelerJP: "ゴミ箱(ばこ)はどこですか？",
+        travelerKR: "고미바코와 도코데스카? (쓰레기통은 어디에 있나요?)",
+        counterpartJP: "こちらでお預(あず)かりしますよ。",
+        counterpartKR: "코치라데 오아즈카리시마스요. (제가 받아드릴게요.)"
+      },
+
+      // Stage 10. 일반 쇼핑 & 드럭스토어
+      {
+        id: 46,
+        stage: "Stage 10. 쇼핑 & 드럭스토어",
+        title: "046. 가격 문의",
+        point: "쇼핑 필수문장! 'いくらですか(이쿠라데스카?)'는 얼마냐는 뜻입니다.",
+        travelerJP: "これ、いくらですか？",
+        travelerKR: "코레, 이쿠라데스카? (이거 얼마인가요?)",
+        counterpartJP: "税込み(ぜいこみ)で3,000円(さんぜんえん)です。",
+        counterpartKR: "제이코미데 산젠엔데스. (세금 포함 3,000엔입니다.)"
+      },
+      {
+        id: 47,
+        stage: "Stage 10. 쇼핑 & 드럭스토어",
+        title: "047. 옷 입어보기 (피팅)",
+        point: "'試着(시착쿠)'는 입어보기(시착)입니다. '시착쿠시테모 이이데스카?'라고 물어보세요.",
+        travelerJP: "試着(しちゃく)してもいいですか？",
+        travelerKR: "시착쿠시테모 이이데스카? (입어봐도 되나요?)",
+        counterpartJP: "はい、ご試着室(しちゃくしつ)へどうぞ。",
+        counterpartKR: "하이, 고시착쿠시츠에 도-조. (네, 피팅룸으로 안내해 드릴게요.)"
+      },
+      {
+        id: 48,
+        stage: "Stage 10. 쇼핑 & 드럭스토어",
+        title: "048. 다른 사이즈/재고 문의",
+        point: "재고는 '在庫(자이코)', 원하는 사이즈 뒤에 '～はありますか(와 아리마스카)'를 붙이세요.",
+        travelerJP: "これのMサイズはありますか？",
+        travelerKR: "코레노 엠사이즈와 아리마스카? (이거 M 사이즈 있나요?)",
+        counterpartJP: "在庫(ざいこ)を確認(かくにん)してきます。",
+        counterpartKR: "자이코오 카쿠닌시테키마스. (재고 확인해 오겠습니다.)"
+      },
+      {
+        id: 49,
+        stage: "Stage 10. 쇼핑 & 드럭스토어",
+        title: "049. 면세(Tax-Free) 가능 여부",
+        point: "드럭스토어 필수! '免税(멘제-)'는 면세입니다. 보통 5,000엔 이상 구입 시 여권 제시 후 가능합니다.",
+        travelerJP: "免税(めんぜい)になりますか？",
+        travelerKR: "멘제-니 나리마스카? (면세 되나요?)",
+        counterpartJP: "5,000円(ごせんえん)以上(いじょう)で免税(めんぜい)になります。",
+        counterpartKR: "고센엔 이죠-데 멘제-니 나리마스. (5,000엔 이상 구매 시 면세 가능합니다.)"
+      },
+      {
+        id: 50,
+        stage: "Stage 10. 쇼핑 & 드럭스토어",
+        title: "050. 현금+카드 혼합 결제 (남은 동전 처리)",
+        point: "여행 마지막 날 남은 엔화 동전을 모두 내고 모자란 금액만 카드로 긁는 유용한 계산 꿀팁입니다!",
+        travelerJP: "残(のこ)りの現金(げんきん)と、不足分(ふそくぶん)はカードで払(はら)えますか？",
+        travelerKR: "노코리노 겐킨토, 후소쿠분와 카-도데 하라에마스카? (남은 현금으로 내고, 부족한 부분은 카드로 결제 가능한가요?)",
+        counterpartJP: "はい、併用(へいよう)できますよ。",
+        counterpartKR: "하이, 헤-요-데키마스요. (네, 함께 혼합 결제 가능합니다.)"
+      }
+    ];
+
+    // State Management
+    let currentIndex = 0;
+    let completedSet = new Set(JSON.parse(localStorage.getItem('jp_completed_scenarios') || '[]'));
+    let reviewBookmarks = new Set(JSON.parse(localStorage.getItem('jp_review_bookmarks') || '[]'));
+    let recognition = null;
+    let isRecording = false;
+
+    // Window Load Init
+    window.onload = function() {
+      initSpeechRecognition();
+      renderStageList();
+      updateStats();
+    };
+
+    // Initialize Web Speech Recognition
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        document.getElementById('micBtn').disabled = true;
+        document.getElementById('micBtnText').innerText = "이 브라우저는 음성 인식을 지원하지 않습니다";
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ja-JP'; // Japanese Recognition
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = function() {
+        isRecording = true;
+        const micBtn = document.getElementById('micBtn');
+        micBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+        micBtn.classList.add('bg-red-500', 'hover:bg-red-600', 'recording-pulse');
+        document.getElementById('micBtnText').innerText = "음성 녹음 중... (다시 누르면 중지)";
+        document.getElementById('speechStatus').innerText = "듣고 있는 중입니다...";
+      };
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        evaluatePronunciation(transcript);
+      };
+
+      recognition.onerror = function(event) {
+        stopRecordingUI();
+        document.getElementById('speechStatus').innerText = "음성 인식 오류가 발생했습니다. 다시 시도해 주세요.";
+      };
+
+      recognition.onend = function() {
+        stopRecordingUI();
+      };
+    }
+
+    function toggleSpeechRecognition() {
+      if (!recognition) return;
+      if (isRecording) {
+        recognition.stop();
+      } else {
+        try {
+          recognition.start();
+        } catch(e) {
+          console.error(e);
         }
+      }
+    }
 
-        const SCENARIOS = generate200Scenarios();
+    function stopRecordingUI() {
+      isRecording = false;
+      const micBtn = document.getElementById('micBtn');
+      micBtn.classList.remove('bg-red-500', 'hover:bg-red-600', 'recording-pulse');
+      micBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+      document.getElementById('micBtnText').innerText = "발음 녹음 시작";
+    }
 
-        // --- APP STATE & LOCALSTORAGE PERSISTENCE ---
-        let currentScenarioIndex = loadSavedIndex();
-        let savedScenarioIds = loadSavedFavorites();
-        let currentScreen = 'home';
+    // Pronunciation Assessment Logic (Levenshtein Distance Similarity)
+    function evaluatePronunciation(userTranscript) {
+      const rawTarget = scenarios[currentIndex].travelerJP;
+      // Strip Kanji furigana readings like (でんしゃ)
+      const cleanTarget = rawTarget.replace(/\(.*?\)/g, '');
 
-        function loadSavedIndex() {
-            const saved = localStorage.getItem('japan_study_last_index');
-            if (saved !== null && !isNaN(parseInt(saved, 10))) {
-                const idx = parseInt(saved, 10);
-                if (idx >= 0 && idx < 200) return idx;
-            }
-            return 0;
+      const distance = levenshteinDistance(userTranscript, cleanTarget);
+      const maxLen = Math.max(userTranscript.length, cleanTarget.length);
+      let accuracy = 0;
+      if (maxLen > 0) {
+        accuracy = Math.round(((maxLen - distance) / maxLen) * 100);
+      }
+      if (accuracy < 0) accuracy = 0;
+
+      // Render Results
+      const resultBox = document.getElementById('speechResultBox');
+      const recognizedText = document.getElementById('recognizedText');
+      const accuracyScore = document.getElementById('accuracyScore');
+      const feedback = document.getElementById('accuracyFeedback');
+
+      resultBox.classList.remove('hidden');
+      recognizedText.innerText = `"${userTranscript}"`;
+      accuracyScore.innerText = `일치도 ${accuracy}%`;
+
+      if (accuracy >= 80) {
+        accuracyScore.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+        feedback.innerText = "🎉 훌륭합니다! 현지에서 충분히 정확히 통할 발음입니다.";
+      } else if (accuracy >= 50) {
+        accuracyScore.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
+        feedback.innerText = "👍 아주 좋아요! 원어민 음성을 다시 듣고 억양을 다듬어 보세요.";
+      } else {
+        accuracyScore.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-100 text-red-800";
+        feedback.innerText = "💪 조금 더 천천히 또박또박 따라 해보세요!";
+      }
+
+      document.getElementById('speechStatus').innerText = "평가 완료!";
+    }
+
+    // Levenshtein Distance Algorithm
+    function levenshteinDistance(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
         }
+      }
+      return matrix[b.length][a.length];
+    }
 
-        function saveCurrentIndex(idx) {
-            localStorage.setItem('japan_study_last_index', idx.toString());
-        }
+    // Text To Speech (TTS)
+    function playAudio(role) {
+      if (!('speechSynthesis' in window)) {
+        alert("이 브라우저는 음성 재생을 지원하지 않습니다.");
+        return;
+      }
 
-        function loadSavedFavorites() {
-            try {
-                const saved = localStorage.getItem('japan_study_favorites');
-                return saved ? JSON.parse(saved) : [];
-            } catch (e) {
-                return [];
-            }
-        }
+      window.speechSynthesis.cancel(); // Stop ongoing speech
 
-        function saveFavorites() {
-            localStorage.setItem('japan_study_favorites', JSON.stringify(savedScenarioIds));
-        }
+      let rawText = (role === 'traveler') ? scenarios[currentIndex].travelerJP : scenarios[currentIndex].counterpartJP;
+      let cleanText = rawText.replace(/\(.*?\)/g, ''); // Strip furigana hiragana in brackets
 
-        function initApp() {
-            renderHomeScreen();
-        }
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 0.9; // Slightly slower for better clarity
 
-        // --- NATURAL TTS SYSTEM (사람처럼 자연스러운 발음) ---
-        function speakJapanese(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Cancel active speeches
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ja-JP';
-                utterance.rate = 0.88; // 약간 여유있는 자연스러운 속도
-                utterance.pitch = 1.05; // 맑고 또렷한 어조
+      window.speechSynthesis.speak(utterance);
+    }
 
-                // 가능한 최상의 고품질 자연어 음성 탐색
-                const voices = window.speechSynthesis.getVoices();
-                const jpVoice = voices.find(v => v.lang.includes('ja') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Kyoko') || v.name.includes('Otoya')));
-                if (jpVoice) {
-                    utterance.voice = jpVoice;
-                }
+    // Render Dashboard Stage List
+    function renderStageList() {
+      const stageContainer = document.getElementById('stageList');
+      stageContainer.innerHTML = '';
 
-                window.speechSynthesis.speak(utterance);
-            } else {
-                showToast("음성 합성을 지원하지 않는 브라우저입니다.", "fa-exclamation-triangle");
-            }
-        }
-        // Pre-load voices for TTS
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
-        }
+      scenarios.forEach((item, idx) => {
+        const isDone = completedSet.has(item.id);
+        const isBookmarked = reviewBookmarks.has(item.id);
 
-        // --- SPEECH RECOGNITION & STRICT COMPARISON ---
-        function startSpeechRecognition(targetText, elementId) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (!SpeechRecognition) {
-                showToast("이 브라우저는 음성 인식을 지원하지 않습니다. (Chrome 권장)", "fa-exclamation-triangle");
-                return;
-            }
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-xl border bg-white shadow-sm hover:shadow transition flex items-center justify-between cursor-pointer ${isDone ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-200'}`;
+        card.onclick = () => startStudy(idx);
 
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'ja-JP';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
+        card.innerHTML = `
+          <div class="flex items-center space-x-3 overflow-hidden">
+            <div class="w-9 h-9 rounded-xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-indigo-100 text-indigo-600'} flex items-center justify-center font-bold text-xs shrink-0">
+              ${isDone ? '<i class="fa-solid fa-check"></i>' : (idx + 1)}
+            </div>
+            <div class="truncate">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">${item.stage}</span>
+              <h4 class="text-sm font-bold text-slate-800 truncate">${item.title}</h4>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 shrink-0 ml-2">
+            ${isBookmarked ? '<i class="fa-solid fa-bookmark text-amber-400 text-sm"></i>' : ''}
+            <i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i>
+          </div>
+        `;
 
-            const micBtn = document.getElementById(`mic-btn-${elementId}`);
-            const resultBox = document.getElementById(`result-box-${elementId}`);
+        stageContainer.appendChild(card);
+      });
+    }
 
-            if (micBtn) {
-                micBtn.classList.add('bg-rose-500', 'text-white', 'animate-pulse');
-                micBtn.classList.remove('bg-slate-100', 'text-slate-600');
-            }
+    // Start / Navigate Study
+    function startStudy(index) {
+      currentIndex = index;
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('studyView').classList.remove('hidden');
+      renderStudyCard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-            if (resultBox) {
-                resultBox.classList.remove('hidden');
-                resultBox.innerHTML = '<span class="text-xs text-indigo-600 font-medium flex items-center"><i class="fas fa-spinner fa-spin mr-1.5"></i>듣고 있습니다... 문장을 똑같이 발음해 보세요!</span>';
-            }
+    function startRandomStudy() {
+      const randomIdx = Math.floor(Math.random() * scenarios.length);
+      startStudy(randomIdx);
+    }
 
-            recognition.start();
+    function goHome() {
+      document.getElementById('studyView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.remove('hidden');
+      renderStageList();
+      updateStats();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                evaluateStrictSpeech(targetText, transcript, resultBox);
-            };
+    function renderStudyCard() {
+      const data = scenarios[currentIndex];
 
-            recognition.onerror = (event) => {
-                if (resultBox) {
-                    resultBox.innerHTML = `<span class="text-xs text-rose-500"><i class="fas fa-times-circle mr-1"></i>음성 인식 실패 (${event.error}). 다시 시도해 주세요.</span>`;
-                }
-                resetMicBtn(micBtn);
-            };
+      // Mark scenario as completed
+      completedSet.add(data.id);
+      localStorage.setItem('jp_completed_scenarios', JSON.stringify(Array.from(completedSet)));
 
-            recognition.onend = () => {
-                resetMicBtn(micBtn);
-            };
-        }
+      // Render Data
+      document.getElementById('stageCategoryBadge').innerText = data.stage;
+      document.getElementById('scenarioTitle').innerText = data.title;
+      document.getElementById('learningPointText').innerText = data.point;
 
-        function resetMicBtn(btn) {
-            if (btn) {
-                btn.classList.remove('bg-rose-500', 'text-white', 'animate-pulse');
-                btn.classList.add('bg-slate-100', 'text-slate-600');
-            }
-        }
+      document.getElementById('travelerJP').innerText = data.travelerJP;
+      document.getElementById('travelerKR').innerText = data.travelerKR;
 
-        // Strict evaluation comparing user speech with target text character by character
-        function evaluateStrictSpeech(target, transcript, resultBox) {
-            // Clean space and punctuation
-            const cleanTarget = target.replace(/[、。？！\s]/g, '');
-            const cleanTranscript = transcript.replace(/[、。？！\s]/g, '');
+      document.getElementById('counterpartJP').innerText = data.counterpartJP;
+      document.getElementById('counterpartKR').innerText = data.counterpartKR;
 
-            const isExactMatch = cleanTarget === cleanTranscript;
+      document.getElementById('scenarioIndexBadge').innerText = `${currentIndex + 1} / ${scenarios.length}`;
 
-            // Generate diff breakdown
-            let htmlDiff = '';
-            const maxLen = Math.max(cleanTarget.length, cleanTranscript.length);
-            let incorrectCount = 0;
+      // Reset speech result box
+      document.getElementById('speechResultBox').classList.add('hidden');
+      document.getElementById('speechStatus').innerText = "버튼을 누르고 말해보세요";
 
-            for (let i = 0; i < cleanTranscript.length; i++) {
-                const spokenChar = cleanTranscript[i];
-                if (i < cleanTarget.length && spokenChar === cleanTarget[i]) {
-                    htmlDiff += `<span class="correct-char">${spokenChar}</span>`;
-                } else {
-                    htmlDiff += `<span class="wrong-char">${spokenChar}</span>`;
-                    incorrectCount++;
-                }
-            }
+      // Bookmark Button State
+      updateBookmarkBtnUI();
 
-            if (isExactMatch) {
-                resultBox.innerHTML = `
-                    <div class="text-xs bg-emerald-50 text-emerald-800 p-2.5 rounded-xl border border-emerald-200">
-                        <div class="font-bold flex items-center space-x-1 text-emerald-700">
-                            <i class="fas fa-check-circle text-base"></i> 
-                            <span>100% 정답! 정형화된 일본어 발음입니다.</span>
-                        </div>
-                        <div class="mt-1 text-slate-700">인식된 발음: <strong class="text-emerald-700">"${transcript}"</strong></div>
-                    </div>`;
-            } else {
-                resultBox.innerHTML = `
-                    <div class="text-xs bg-rose-50 text-rose-800 p-2.5 rounded-xl border border-rose-200 space-y-1">
-                        <div class="font-bold flex items-center space-x-1 text-rose-700">
-                            <i class="fas fa-times-circle text-base"></i> 
-                            <span>발음 오답! 정확한 문장을 비교해 보세요.</span>
-                        </div>
-                        <div class="text-slate-700">목표 문장: <span class="font-bold text-slate-900">${cleanTarget}</span></div>
-                        <div class="text-slate-700">인식 분석: <span>${htmlDiff}</span></div>
-                        <div class="text-[11px] text-rose-600 mt-0.5">
-                            * <span class="wrong-char">붉은색</span> 표시 부분이 틀렸거나 다른 발음입니다. 천천히 다시 말해 보세요!
-                        </div>
-                    </div>`;
-            }
-        }
+      // Update Navigation Buttons
+      document.getElementById('prevBtn').disabled = (currentIndex === 0);
+      document.getElementById('prevBtn').classList.toggle('opacity-50', currentIndex === 0);
 
-        // --- UI RENDER FUNCTIONS ---
+      document.getElementById('nextBtn').disabled = (currentIndex === scenarios.length - 1);
+      document.getElementById('nextBtn').classList.toggle('opacity-50', currentIndex === scenarios.length - 1);
 
-        // 1. Home Screen
-        function renderHomeScreen() {
-            currentScreen = 'home';
-            const headerActions = document.getElementById('header-actions');
-            headerActions.classList.add('hidden');
-            headerActions.innerHTML = '';
+      updateStats();
+    }
 
-            const content = document.getElementById('app-content');
-            content.innerHTML = `
-                <div class="flex-1 flex flex-col justify-center items-center text-center px-4 py-6">
-                    <!-- Hero Mascot / Graphic -->
-                    <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-3xl mb-4 shadow-inner">
-                        <i class="fas fa-plane-departure"></i>
-                    </div>
+    function navigateScenario(direction) {
+      const newIdx = currentIndex + direction;
+      if (newIdx >= 0 && newIdx < scenarios.length) {
+        currentIndex = newIdx;
+        renderStudyCard();
+      }
+    }
 
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">여행 D-3! 총 200개 상황 완벽 학습</h2>
-                    <p class="text-slate-600 text-sm max-w-md mb-2 leading-relaxed">
-                        제한 없이 1번부터 200번까지 연속 학습하세요! <br>
-                        재접속 시 <strong>마지막으로 공부한 위치</strong>에서 이어집니다.
-                    </p>
+    // Toggle Review Bookmark
+    function toggleCurrentBookmark() {
+      const currentId = scenarios[currentIndex].id;
+      if (reviewBookmarks.has(currentId)) {
+        reviewBookmarks.delete(currentId);
+      } else {
+        reviewBookmarks.add(currentId);
+      }
+      localStorage.setItem('jp_review_bookmarks', JSON.stringify(Array.from(reviewBookmarks)));
+      updateBookmarkBtnUI();
+      updateStats();
+    }
 
-                    <div class="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full mb-6">
-                        <i class="fas fa-history mr-1"></i> 최근 공부했던 위치: <span class="text-indigo-900 font-extrabold">${currentScenarioIndex + 1}번 상황</span>
-                    </div>
+    function updateBookmarkBtnUI() {
+      const currentId = scenarios[currentIndex].id;
+      const btn = document.getElementById('bookmarkBtn');
+      if (reviewBookmarks.has(currentId)) {
+        btn.className = "p-2 rounded-lg text-amber-400 hover:text-amber-500 transition";
+      } else {
+        btn.className = "p-2 rounded-lg text-slate-300 hover:text-amber-400 transition";
+      }
+    }
 
-                    <!-- Main Buttons -->
-                    <div class="w-full max-w-xs space-y-3.5">
-                        <button onclick="startLearning()" class="w-full py-4 px-6 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center space-x-3 text-lg">
-                            <i class="fas fa-play"></i>
-                            <span>${currentScenarioIndex > 0 ? `${currentScenarioIndex + 1}번 상황부터 이어하기` : '1번 상황부터 학습하기'}</span>
-                        </button>
+    // Stats and Progress Updates
+    function updateStats() {
+      const completedCount = completedSet.size;
+      const reviewCount = reviewBookmarks.size;
+      const total = scenarios.length;
 
-                        <button onclick="openReview()" class="w-full py-4 px-6 bg-white hover:bg-slate-50 active:scale-95 text-slate-700 font-bold rounded-2xl shadow-md border border-slate-200 transition-all flex items-center justify-center space-x-3 text-lg relative">
-                            <i class="fas fa-bookmark text-amber-500"></i>
-                            <span>복습하기</span>
-                            ${savedScenarioIds.length > 0 ? `<span class="absolute top-3 right-4 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">${savedScenarioIds.length}</span>` : ''}
-                        </button>
-                    </div>
+      document.getElementById('completedStat').innerText = `${completedCount}개`;
+      document.getElementById('reviewStat').innerText = `${reviewCount}개`;
+      document.getElementById('reviewCountBadge').innerText = reviewCount;
 
-                    <!-- Quick Jump Input Box -->
-                    <div class="mt-6 w-full max-w-xs bg-slate-100 p-3 rounded-2xl flex items-center justify-between space-x-2">
-                        <span class="text-xs font-bold text-slate-600 whitespace-nowrap"><i class="fas fa-search mr-1"></i>상황 바로이동:</span>
-                        <input type="number" id="home-jump-input" min="1" max="200" placeholder="1~200" class="w-20 px-2 py-1 text-center font-bold text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeydown="if(event.key==='Enter') jumpToScenarioFromHome()">
-                        <button onclick="jumpToScenarioFromHome()" class="px-3 py-1 bg-indigo-600 text-white font-bold text-xs rounded-lg hover:bg-indigo-700">이동</button>
-                    </div>
-                </div>
-            `;
-        }
+      const percent = Math.round((completedCount / total) * 100);
+      document.getElementById('progressBar').style.width = `${percent}%`;
 
-        function jumpToScenarioFromHome() {
-            const input = document.getElementById('home-jump-input');
-            const num = parseInt(input.value, 10);
-            if (!isNaN(num) && num >= 1 && num <= 200) {
-                currentScenarioIndex = num - 1;
-                saveCurrentIndex(currentScenarioIndex);
-                renderLearnScreen();
-            } else {
-                showToast("1번부터 200번 사이의 번호를 입력해 주세요.", "fa-exclamation-triangle");
-            }
-        }
+      // Continue Button Label
+      const continueIdx = getContinueIndex();
+      document.getElementById('continueBtnText').innerText = `이어서 학습하기 (${continueIdx + 1}번부터)`;
+    }
 
-        // 2. Learn Screen
-        function renderLearnScreen() {
-            currentScreen = 'learn';
-            saveCurrentIndex(currentScenarioIndex); // Auto-save current learning state
+    function getContinueIndex() {
+      for (let i = 0; i < scenarios.length; i++) {
+        if (!completedSet.has(scenarios[i].id)) return i;
+      }
+      return 0;
+    }
 
-            const scenario = SCENARIOS[currentScenarioIndex];
-            const isSaved = savedScenarioIds.includes(scenario.id);
+    // Modal Operations
+    function openReviewModal() {
+      const listContainer = document.getElementById('reviewList');
+      listContainer.innerHTML = '';
 
-            // Set Header Actions with Scenario Direct Number Selector Input
-            const headerActions = document.getElementById('header-actions');
-            headerActions.classList.remove('hidden');
-            headerActions.innerHTML = `
-                <div class="flex items-center bg-indigo-700/80 rounded-lg px-2 py-1 text-xs text-white space-x-1">
-                    <span class="font-bold shrink-0">No.</span>
-                    <input type="number" id="header-jump-input" value="${currentScenarioIndex + 1}" min="1" max="200" 
-                           class="w-12 text-center bg-white text-slate-900 font-bold rounded px-1 py-0.5 text-xs focus:outline-none"
-                           onkeydown="if(event.key==='Enter') jumpToScenarioFromHeader()">
-                    <span class="text-[10px] text-indigo-200">/200</span>
-                    <button onclick="jumpToScenarioFromHeader()" class="ml-1 text-indigo-100 hover:text-white"><i class="fas fa-arrow-right text-xs"></i></button>
-                </div>
-                <button onclick="toggleSaveCurrentScenario()" class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all ${isSaved ? 'bg-amber-400 text-slate-900 shadow' : 'bg-indigo-500 hover:bg-indigo-400 text-white'}">
-                    <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
-                    <span>${isSaved ? '저장됨' : '저장'}</span>
-                </button>
-                <button onclick="renderHomeScreen()" class="px-2.5 py-1.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg text-xs font-semibold">
-                    <i class="fas fa-home"></i>
-                </button>
-            `;
+      if (reviewBookmarks.size === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-10 text-slate-400">
+            <i class="fa-solid fa-bookmark text-4xl mb-2 text-slate-200"></i>
+            <p class="text-sm">저장된 복습 항목이 없습니다.</p>
+            <p class="text-xs mt-1">학습 중 헷갈리는 대화의 북마크 아이콘을 눌러 추가하세요!</p>
+          </div>
+        `;
+      } else {
+        reviewBookmarks.forEach(id => {
+          const item = scenarios.find(s => s.id === id);
+          if (!item) return;
 
-            const content = document.getElementById('app-content');
-            content.innerHTML = `
-                <div class="space-y-4">
-                    <!-- Situation Header -->
-                    <div class="flex items-center justify-between border-b pb-3">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-bold px-2.5 py-1 rounded-full ${scenario.badgeColor}">${scenario.category}</span>
-                            <h3 class="font-bold text-slate-800 text-base sm:text-lg">${scenario.title}</h3>
-                        </div>
-                        <span class="text-xs font-bold px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-lg">${currentScenarioIndex + 1} / 200</span>
-                    </div>
+          const card = document.createElement('div');
+          card.className = "p-3 bg-slate-50 border border-slate-200 rounded-xl hover:border-indigo-300 transition flex justify-between items-center cursor-pointer";
+          card.onclick = () => {
+            closeReviewModal();
+            const targetIdx = scenarios.findIndex(s => s.id === id);
+            startStudy(targetIdx);
+          };
 
-                    <!-- Dialogue Sentences Container -->
-                    <div class="space-y-3.5 my-2">
-                        ${scenario.dialogue.map((item, idx) => renderSentenceCard(item, idx, 'learn')).join('')}
-                    </div>
-                </div>
+          card.innerHTML = `
+            <div>
+              <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">${item.stage}</span>
+              <h4 class="text-sm font-bold text-slate-800 mt-1">${item.title}</h4>
+              <p class="text-xs text-slate-500 truncate max-w-xs">${item.travelerJP}</p>
+            </div>
+            <button onclick="event.stopPropagation(); removeBookmark(${id})" class="text-slate-300 hover:text-red-500 p-2">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          `;
+          listContainer.appendChild(card);
+        });
+      }
 
-                <!-- Footer Navigation -->
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
-                    <button onclick="prevScenario()" ${currentScenarioIndex === 0 ? 'disabled class="opacity-30 cursor-not-allowed px-4 py-2.5 bg-slate-200 text-slate-500 rounded-xl font-bold text-sm"' : 'class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-xl font-bold text-sm transition-all flex items-center space-x-1"'}>
-                        <i class="fas fa-chevron-left text-xs"></i>
-                        <span>이전 (${currentScenarioIndex})</span>
-                    </button>
+      document.getElementById('reviewModal').classList.remove('hidden');
+    }
 
-                    <button onclick="nextScenario()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl font-bold text-sm shadow-md shadow-indigo-200 transition-all flex items-center space-x-2">
-                        <span>${currentScenarioIndex === 199 ? '1번 상황으로 처음부터' : `다음 (${currentScenarioIndex + 2}번)`}</span>
-                        <i class="fas fa-chevron-right text-xs"></i>
-                    </button>
-                </div>
-            `;
-        }
+    function closeReviewModal() {
+      document.getElementById('reviewModal').classList.add('hidden');
+    }
 
-        function jumpToScenarioFromHeader() {
-            const input = document.getElementById('header-jump-input');
-            const num = parseInt(input.value, 10);
-            if (!isNaN(num) && num >= 1 && num <= 200) {
-                currentScenarioIndex = num - 1;
-                renderLearnScreen();
-            } else {
-                showToast("1~200 번호만 입력 가능합니다.", "fa-exclamation-triangle");
-            }
-        }
-        // --- CONTROLLER ACTIONS ---
-        function startLearning() {
-            renderLearnScreen();
-        }
-
-        function nextScenario() {
-            if (currentScenarioIndex < SCENARIOS.length - 1) {
-                currentScenarioIndex++;
-            } else {
-                currentScenarioIndex = 0; // Loop back for infinite study
-                showToast("200개 모든 상황을 완수하셨습니다! 다시 1번부터 시작합니다.", "fa-trophy");
-            }
-            renderLearnScreen();
-        }
-
-        function prevScenario() {
-            if (currentScenarioIndex > 0) {
-                currentScenarioIndex--;
-                renderLearnScreen();
-            }
-        }
-
-        function toggleSaveCurrentScenario() {
-            const currentId = SCENARIOS[currentScenarioIndex].id;
-            const index = savedScenarioIds.indexOf(currentId);
-
-            if (index > -1) {
-                savedScenarioIds.splice(index, 1);
-                showToast("복습 목록에서 제거되었습니다.", "fa-minus-circle");
-            } else {
-                savedScenarioIds.push(currentId);
-                showToast("복습 목록에 저장되었습니다!", "fa-check-circle");
-            }
-            saveFavorites();
-            renderLearnScreen();
-        }
-
-        function deleteSavedScenario(id) {
-            savedScenarioIds = savedScenarioIds.filter(savedId => savedId !== id);
-            saveFavorites();
-            showToast("복습 목록에서 삭제되었습니다.", "fa-trash-alt");
-            renderReviewScreen();
-        }
-
-        function openReview() {
-            renderReviewScreen();
-        }
-
-        // Toast Helper
-        function showToast(message, iconClass = "fa-info-circle") {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.innerText = message;
-            toastIcon.className = `fas ${iconClass} text-amber-400`;
-
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 2500);
-        }
-
-        // Initialize App on window load
-        window.onload = initApp;
-    </script>
+    function removeBookmark(id) {
+      reviewBookmarks.delete(id);
+      localStorage.setItem('jp_review_bookmarks', JSON.stringify(Array.from(reviewBookmarks)));
+      openReviewModal();
+      updateStats();
+      if (!document.getElementById('studyView').classList.contains('hidden')) {
+        updateBookmarkBtnUI();
+      }
+    }
+  </script>
 </body>
 </html>
